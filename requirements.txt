@@ -1,0 +1,12 @@
+# Common data science / NLP packages
+numpy
+pandas
+scikit-learn
+matplotlib
+jupyter
+
+# Transformer libraries (optional — include if you use Hugging Face)
+transformers
+torch
+
+# Add other packages you require below, and pin versions when ready

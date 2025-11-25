@@ -1,0 +1,51 @@
+review_text,label
+"Ramp available and wide entrance",Positive
+"Elevator works perfectly",Positive
+"Very accessible for everyone",Positive
+"Wheelchair ramp in good condition",Positive
+"Entrance is easy for wheelchair users",Positive
+"Accessible restroom available",Positive
+"Staff helped with wheelchair access",Positive
+"Automatic doors make entry easy",Positive
+"Smooth pathway and ramps",Positive
+"Spacious interior for mobility devices",Positive
+"Parking is okay but narrow entrance",Mixed
+"Entrance is okay but crowded",Mixed
+"Ramp present but slippery",Mixed
+"Elevator works but slow",Mixed
+"Stairs exist but small ramp provided",Mixed
+"Some areas accessible, others not",Mixed
+"Wheelchair access is partial",Mixed
+"Ramp is narrow, hard to maneuver",Mixed
+"Accessible but noisy environment",Mixed
+"Mixed accessibility in different areas",Mixed
+"No wheelchair access at entrance",Negative
+"Stairs only, difficult for wheelchair",Negative
+"Ramp broken and unsafe",Negative
+"No accessible restroom available",Negative
+"Narrow doorway, impossible for wheelchair",Negative
+"No elevator for upper floors",Negative
+"Staff not helpful for accessibility",Negative
+"Obstacles block pathways",Negative
+"Doors too heavy for mobility devices",Negative
+"Parking inaccessible for wheelchair users",Negative
+"Slippery ramp, unsafe for wheelchairs",Negative
+"Entrance blocked by steps",Negative
+"Pathways too narrow",Negative
+"Restroom too small for mobility devices",Negative
+"Elevator out of service",Negative
+"Stairs only to main area",Negative
+"Ramp missing entirely",Negative
+"Entrance difficult for wheelchair",Negative
+"Building not wheelchair-friendly",Negative
+"Ramp poorly maintained",Negative
+"Restroom inaccessible",Negative
+"Elevator doors too narrow",Negative
+"Obstacles block ramp",Negative
+"Pathway uneven for wheelchair",Negative
+"Staff unaware of accessibility needs",Negative
+"Entrance cluttered, difficult for access",Negative
+"Ramp not present at main entrance",Negative
+"Stairs without alternative",Negative
+"Wheelchair access denied",Negative
+"Restroom lacks accessibility features",Negative

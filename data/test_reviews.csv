@@ -1,0 +1,16 @@
+review_text,label
+"Ramp is wide and entrance is smooth",Positive
+"Elevator works perfectly, very convenient",Positive
+"Accessible restroom available and clean",Positive
+"Wheelchair ramp is narrow but usable",Mixed
+"Entrance is okay but somewhat crowded",Mixed
+"Some areas are accessible, others not",Mixed
+"Ramp is broken and unsafe",Negative
+"No elevator for upper floors, difficult access",Negative
+"Stairs only, impossible for wheelchair users",Negative
+"Pathway smooth and easy for mobility devices",Positive
+"Mixed accessibility in different parts of building",Mixed
+"Staff helped with wheelchair access",Positive
+"Doors too heavy, difficult to open",Negative
+"Ramp present but slippery, careful needed",Mixed
+"No accessible restroom available",Negative
