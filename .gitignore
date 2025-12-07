@@ -10,7 +10,7 @@ __pycache__/
 *.pyd
 .Python
 
-# Model files (too large for GitHub - train locally)
+# Model files 
 finetuned-accessibility-bert/
 output/
 
@@ -30,5 +30,3 @@ data/*
 .DS_Store
 Thumbs.db
 
-# Evaluation results (optional - can be regenerated)
-# evaluation_results.json

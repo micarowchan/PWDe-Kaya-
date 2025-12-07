@@ -84,6 +84,11 @@ pip install transformers datasets nltk sentence-transformers scikit-learn pandas
 
 # 4. Download NLTK data
 python3 -c "import nltk; nltk.download(['wordnet', 'omw-1.4', 'stopwords', 'averaged_perceptron_tagger'])"
+
+# 5. Train the model (REQUIRED - model not included in repo due to size)
+python3 -m src.fine_tuning.fine_tune
+# Training takes 20-40 minutes on CPU
+# Creates: finetuned-accessibility-bert/final_model/
 ```
 
 ---
@@ -112,10 +117,15 @@ result = pipeline.analyze_review("The mall has wheelchair ramps and accessible p
 
 ## 🎓 Training & Evaluation
 
-**Train Model:**
+⚠️ **IMPORTANT**: The trained model is NOT included in this repo due to GitHub's 100MB file size limit. You must train it locally before using the pipeline.
+
+**Train Model (REQUIRED on first setup):**
 ```bash
 python3 -m src.fine_tuning.fine_tune
 ```
+- Takes 20-40 minutes on CPU
+- Creates `finetuned-accessibility-bert/final_model/` directory (~500MB)
+- Only needs to be done once
 
 **Evaluate Model:**
 ```bash
