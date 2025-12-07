@@ -140,139 +140,48 @@ python3 -m src.fine_tuning.evaluate
 
 ### Analyzing Multiple Reviews
 
-```python
-from src.accessibility_pipeline import AccessibilityPipeline
+```
+STEP 1: Initialize pipeline (only once at startup)
+    pipeline = AccessibilityPipeline()
 
-# STEP 1: Initialize pipeline ONCE (takes ~1 minute on first load)
-# Reuse this instance for ALL reviews
-pipeline = AccessibilityPipeline()
+STEP 2: Get reviews from database
+    reviews = fetch_reviews_from_database()
 
-# STEP 2: Get all reviews from your database
-# Example structure:
-reviews = [
-    {"id": "review_123", "text": "Great wheelchair access", "establishment_id": "mall_1"},
-    {"id": "review_456", "text": "Food was delicious", "establishment_id": "mall_1"},
-    # ... more reviews
-]
-
-# STEP 3: Process each review
-results = []
-
-for review in reviews:
-    try:
-        # Analyze the review
-        result = pipeline.analyze_review(review["text"])
+STEP 3: Process each review
+    FOR each review in reviews:
+        TRY:
+            result = pipeline.analyze_review(review.text)
+            
+            Store result:
+                - is_accessibility_related
+                - keywords
+                - sentiment ("Positive" | "Mixed" | "Negative")
+                - sentiment_score (0.0 to 1.0)
         
-        # Store the result with review ID
-        results.append({
-            "review_id": review["id"],
-            "establishment_id": review["establishment_id"],
-            "is_accessibility_related": result["is_accessibility_related"],
-            "keywords": result["keywords"],
-            "sentiment": result["sentiment"],  # "Positive" | "Mixed" | "Negative"
-            "sentiment_score": result["sentiment_score"]  # 0.0 to 1.0
-        })
+        CATCH SystemExit:
+            // Review skipped (not accessibility-related)
+            Store NULL values:
+                - is_accessibility_related = False
+                - keywords = []
+                - sentiment = NULL
+                - sentiment_score = 0.0
         
-    except SystemExit:
-        # Review was skipped (not accessibility-related)
-        # IMPORTANT: Store NULL/zero values for skipped reviews
-        results.append({
-            "review_id": review["id"],
-            "establishment_id": review["establishment_id"],
-            "is_accessibility_related": False,
-            "keywords": [],
-            "sentiment": None,  # NULL in database
-            "sentiment_score": 0.0  # Zero for numeric score
-        })
-        
-    except Exception as e:
-        # Handle other errors (e.g., empty text, encoding issues)
-        print(f"Error processing review {review['id']}: {e}")
-        results.append({
-            "review_id": review["id"],
-            "establishment_id": review["establishment_id"],
-            "is_accessibility_related": None,  # NULL - error state
-            "keywords": [],
-            "sentiment": None,
-            "sentiment_score": 0.0
-        })
+        CATCH Exception:
+            // Error occurred
+            Store NULL values for all fields
 
-# STEP 4: Batch insert results into database
-# Insert all results into your reviews table or sentiment_results table
+STEP 4: Save results to database
 ```
 
-### Database Schema Recommendation
-
-```sql
--- Add these columns to your reviews table
-ALTER TABLE reviews ADD COLUMN is_accessibility_related BOOLEAN;
-ALTER TABLE reviews ADD COLUMN keywords TEXT[];  -- Array of strings
-ALTER TABLE reviews ADD COLUMN sentiment VARCHAR(10);  -- "Positive", "Mixed", "Negative", or NULL
-ALTER TABLE reviews ADD COLUMN sentiment_score DECIMAL(3,2);  -- 0.00 to 1.00
-
--- Or create separate table
-CREATE TABLE review_sentiments (
-    review_id VARCHAR PRIMARY KEY,
-    establishment_id VARCHAR,
-    is_accessibility_related BOOLEAN,
-    keywords TEXT[],
-    sentiment VARCHAR(10),
-    sentiment_score DECIMAL(3,2),
-    analyzed_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### Calculating Establishment Median Sentiment
-
-```python
-def calculate_establishment_sentiment(establishment_id):
-    """
-    Calculate median sentiment for an establishment from all its reviews
-    """
-    # Get all accessibility-related reviews for this establishment
-    # Filter: is_accessibility_related = True AND sentiment IS NOT NULL
-    reviews = get_reviews_from_db(
-        establishment_id=establishment_id,
-        is_accessibility_related=True
-    )
-    
-    # Extract sentiment scores (skip NULL values)
-    sentiment_scores = [
-        r["sentiment_score"] 
-        for r in reviews 
-        if r["sentiment_score"] is not None and r["sentiment_score"] > 0
-    ]
-    
-    if len(sentiment_scores) == 0:
-        return None  # No valid reviews
-    
-    # Calculate median
-    from statistics import median
-    median_score = median(sentiment_scores)
-    
-    # Update establishment record
-    update_establishment(establishment_id, {
-        "accessibility_sentiment_median": median_score,
-        "accessibility_review_count": len(sentiment_scores)
-    })
-    
-    return median_score
-```
-
-### Important Notes for Backend 
+### Important Notes for Backend Dev
 
 1. **Initialize Once**: Create pipeline instance at app startup, NOT per request
 2. **Handle Skipped Reviews**: Store NULL/0 values when review is skipped (not accessibility-related)
-3. **Median Calculation**: Only use reviews where `is_accessibility_related = True` and `sentiment_score > 0`
-4. **Performance**: First analysis takes ~5 min (model loading), then ~200ms per review
-5. **Error Handling**: Wrap in try-except to handle empty text, encoding issues
-6. **Batch Processing**: Process reviews in batches, insert results in bulk for efficiency
+3. **Performance**: First analysis takes ~1 minute (model loading), then ~200ms per review
+4. **Error Handling**: Wrap in try-except to handle empty text, encoding issues
+5. **Batch Processing**: Process reviews in batches for efficiency
 
 ### Backend Notes
-
-- After makuha yung sentiment sa gabos, i kuha na lang yung median kang gabos na review sentiment tapos yung average ng confidence score, per establishment, tapos i- store.
-
-- Sa paglagay ng sa evaluation. Nasa evaluation_results.json bale ifefetch na lang dito sa json file yung evaluation results since same man sa lahat na establishments.
 
 - After makuha yung sentiment sa gabos, i kuha na lang yung median kang gabos na review sentiment tapos yung average ng confidence score, per establishment, tapos i- store.
 
