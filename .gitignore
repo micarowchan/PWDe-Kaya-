@@ -10,8 +10,8 @@ __pycache__/
 *.pyd
 .Python
 
-# Model Training Checkpoints (exclude intermediate checkpoints, keep final_model)
-finetuned-accessibility-bert/checkpoint-*/
+# Model files (too large for GitHub - train locally)
+finetuned-accessibility-bert/
 output/
 
 # Data files except train and test
